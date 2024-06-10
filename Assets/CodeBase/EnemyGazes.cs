@@ -2,17 +2,21 @@ using UnityEngine;
 
 public class EnemyGazes : MonoBehaviour
 {
+    [Header("Attack Settings")]
     [SerializeField] private float _timer;
     [SerializeField] private int _startDamage;
-    [SerializeField] private int _damage;
-
+    
+    private int _damage;
     private HelthSystem _playerhelth;
     private bool _activatedSmokeDamage;
+
 
     private void Start()
     {
         _damage = _startDamage;
     }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
@@ -24,6 +28,8 @@ public class EnemyGazes : MonoBehaviour
             Invoke("PoisonAttack", _timer);
         }
     }
+
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Player")
@@ -32,6 +38,7 @@ public class EnemyGazes : MonoBehaviour
             _damage = 0;
         }
     }
+
 
     private void PoisonAttack()
     {

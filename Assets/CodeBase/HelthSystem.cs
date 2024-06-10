@@ -1,13 +1,17 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class HelthSystem : MonoBehaviour
 {
+    [Header("Helth Settings")]
     [SerializeField] private int _maxHP;
-    [SerializeField]private int _currentHP;
     [SerializeField] HelthBar _helthBar;
+
+    [Header("Animation Settings")]
     [SerializeField] private Animator _anim;
     [SerializeField] private CharacterController _player;
+
+    private int _currentHP;
+
 
     private void Start()
     {
@@ -19,10 +23,10 @@ public class HelthSystem : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (_player._shield.activeInHierarchy) 
+        if (_player.shield.activeInHierarchy) 
         {
             Debug.Log("я не могу пробить щит!");
-            _player._shieldTimer.ReduceTime(damage);
+            _player.shieldTimer.ReduceTime(damage);
             
         }
         else 
@@ -31,6 +35,7 @@ public class HelthSystem : MonoBehaviour
             if (_currentHP <= 0)
             {
                 _anim.SetTrigger("deth");
+                _player._isDead = true;
             }
             else if (damage != 0)
             {
@@ -44,15 +49,14 @@ public class HelthSystem : MonoBehaviour
         
         _helthBar.Sethealth(_currentHP);
     }
+
+
     public void AddHP(int newHelth)
     {
         _currentHP += newHelth;
         if(_currentHP > _maxHP) { _currentHP = _maxHP; }
         _helthBar.Sethealth(_currentHP);
     }
-    void DethGO()
-    {
-        Destroy(this.gameObject);
-    }
+
     
 }

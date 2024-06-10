@@ -29928,17 +29928,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2566a38f6264698468a8abc69d4dd9cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 6
-  _gun: {fileID: 1804211633}
+  _speedCharacter: 5
   _joyStick: {fileID: 1567935086}
-  _centerPoint: {fileID: 1732725743}
-  _layerMask:
+  _centerAttackRadius: {fileID: 1732725743}
+  _gun: {fileID: 1804211633}
+  _layerFindEnemys:
     serializedVersion: 2
     m_Bits: 256
-  _radius: 1.4
+  _radiusAttack: 1.5
   _shieldEffect: {fileID: 6619988768889645583, guid: a03e493f9bb88a343977f09993a47dad, type: 3}
-  _shield: {fileID: 1654237822}
-  _shieldTimer: {fileID: 937820355}
+  shield: {fileID: 1654237822}
+  shieldTimer: {fileID: 937820355}
+  _isDead: 0
 --- !u!95 &607250867
 Animator:
   serializedVersion: 4
@@ -30024,7 +30025,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHP: 100
-  _currentHP: 0
   _helthBar: {fileID: 2037200871}
   _anim: {fileID: 607250867}
   _player: {fileID: 607250866}
@@ -42681,7 +42681,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timer: 1
   _startDamage: 10
-  _damage: 0
 --- !u!70 &1873914141
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

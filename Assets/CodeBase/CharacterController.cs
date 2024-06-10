@@ -1,13 +1,24 @@
-using Newtonsoft.Json.Bson;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private GameObject _gun;
+    [Header("Player Settings")]
+    [SerializeField] private float _speedCharacter;
     [SerializeField] private Joystick _joyStick;
+
+    [Header("Attack Settings")]
+    [SerializeField] private Transform _centerAttackRadius;
+    [SerializeField] private GameObject _gun;
+    [SerializeField] private LayerMask _layerFindEnemys;
+    [SerializeField] private float _radiusAttack;
+
+    [Header("Shield Settings")]
+    [SerializeField] private GameObject _shieldEffect;
+    [SerializeField] public GameObject shield;
+
+    [SerializeField] public Shield shieldTimer;
+
 
     private Animator _anim;
     private Rigidbody2D _rb;
@@ -15,29 +26,22 @@ public class CharacterController : MonoBehaviour
     private bool facingRight = true;
     private bool _isMove;
 
-
-    [SerializeField] private Transform _centerPoint;
-    [SerializeField] private LayerMask _layerMask;
-    [SerializeField] private float _radius;
-    [SerializeField] private GameObject _shieldEffect;
-
-    [SerializeField] public GameObject _shield;
-    [SerializeField] public Shield _shieldTimer;
+    public bool _isDead;
 
 
     private void Start()
     {
-        _shield.SetActive(false);
+        shield.SetActive(false);
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
     }
+
 
     private void FixedUpdate()
     {
         MoveHero();
     }
 
-    
 
     private void MoveHero()
     {
@@ -45,13 +49,17 @@ public class CharacterController : MonoBehaviour
         // float moveY = Input.GetAxisRaw("Vertical");
         float moveX = _joyStick.Horizontal;
         float moveY = _joyStick.Vertical;
+        if (!_isDead)
+        {
+            _move = new Vector2(moveX, moveY).normalized * _speedCharacter;
+            if (facingRight == true && moveX > 0) { Flip(); }
+            else if (facingRight == false && moveX < 0) { Flip(); };
+            _rb.velocity = _move;
+            AnimateMoving(moveX, moveY);
+        } 
         
-        _move = new Vector2(moveX, moveY).normalized * _speed;
-        if(facingRight == true && moveX > 0) { Flip(); }
-        else if(facingRight == false && moveX < 0) { Flip(); };
-        _rb.velocity = _move;
-        AnimateMoving(moveX, moveY);
     } 
+
 
     private void AnimateMoving(float moveX, float moveY)
     {
@@ -68,7 +76,7 @@ public class CharacterController : MonoBehaviour
         {
             _anim.SetBool("walkSide", false);
             _isMove = false;
-            Collider2D enemysDetected = Physics2D.OverlapCircle(_centerPoint.position, _radius, _layerMask);
+            Collider2D enemysDetected = Physics2D.OverlapCircle(_centerAttackRadius.position, _radiusAttack, _layerFindEnemys);
             if (enemysDetected != null) { AttackEnemy(enemysDetected.transform.position); }
             
             
@@ -76,6 +84,7 @@ public class CharacterController : MonoBehaviour
         
     }
     
+
     void Flip()
     {
         facingRight = !facingRight;
@@ -83,6 +92,8 @@ public class CharacterController : MonoBehaviour
         scaler.x *= -1;
         transform.localScale = scaler;
     }
+
+
     void AttackEnemy(Vector2 enemyPosition)
     {
         if((enemyPosition.x + enemyPosition.y) / Mathf.Sqrt(2) > (transform.position.x + transform.position.y) / Mathf.Sqrt(2) &&
@@ -127,22 +138,25 @@ public class CharacterController : MonoBehaviour
         }
     }
 
+
     void DethHero()
     {
         Destroy(this.gameObject);
     }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Shield")
         {
             Instantiate(_shieldEffect, transform.position, Quaternion.identity);
-            if (!_shield.activeInHierarchy)
+            if (!shield.activeInHierarchy)
             {
-                _shield.SetActive(true);
-                _shieldTimer.gameObject.SetActive(true);
-                _shieldTimer.isCoolDown = true;
+                shield.SetActive(true);
+                shieldTimer.gameObject.SetActive(true);
+                shieldTimer.isCoolDown = true;
             }
-            else {_shieldTimer.ResetTimer(); }
+            else {shieldTimer.ResetTimer(); }
             Destroy(collision.gameObject);
         }
         

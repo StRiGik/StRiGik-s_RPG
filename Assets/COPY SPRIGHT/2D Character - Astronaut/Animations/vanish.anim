@@ -160,7 +160,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 1.6
-    functionName: DethGO
+    functionName: DethHero
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

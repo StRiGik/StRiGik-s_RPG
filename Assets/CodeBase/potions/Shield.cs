@@ -3,17 +3,20 @@ using UnityEngine.UI;
 
 public class Shield : MonoBehaviour
 {
+    [Header("Shield Settings")]
     [SerializeField] private float _coolDown;
     [SerializeField]private CharacterController _player;
 
-    public bool isCoolDown;
     private Image _shieldImage;
+
+    public bool isCoolDown;
 
     private void Start()
     {
         _shieldImage = GetComponent<Image>();
         isCoolDown = true;
     }
+
 
     private void Update()
     {
@@ -24,15 +27,19 @@ public class Shield : MonoBehaviour
             {
                 _shieldImage.fillAmount = 1;
                 isCoolDown = false;
-                _player._shield.SetActive(false);
+                _player.shield.SetActive(false);
                 gameObject.SetActive(false);
             }
         }
     }
+
+
     public void ResetTimer()
     {
         _shieldImage.fillAmount = 1;
     }
+
+
     public void ReduceTime(int damage)
     {
         _shieldImage.fillAmount -= damage / 50f;
