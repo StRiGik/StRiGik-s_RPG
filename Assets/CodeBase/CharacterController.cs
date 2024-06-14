@@ -5,6 +5,7 @@ public class CharacterController : MonoBehaviour
 {
     [Header("Player Settings")]
     [SerializeField] private float _speedCharacter;
+    [SerializeField] private float _startDamage;
     [SerializeField] private Joystick _joyStick;
 
     [Header("Attack Settings")]
@@ -12,6 +13,9 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private GameObject _gun;
     [SerializeField] private LayerMask _layerFindEnemys;
     [SerializeField] private float _radiusAttack;
+
+    [SerializeField] private Transform[] _damagePoints;
+    [SerializeField] private float _rangeDamagePoints;
 
     [Header("Shield Settings")]
     [SerializeField] private GameObject _shieldEffect;
@@ -25,6 +29,7 @@ public class CharacterController : MonoBehaviour
     private Vector2 _move;
     private bool facingRight = true;
     private bool _isMove;
+    private float _currentDamage;
 
     public bool _isDead;
 
@@ -32,6 +37,7 @@ public class CharacterController : MonoBehaviour
     private void Start()
     {
         shield.SetActive(false);
+        _currentDamage = _startDamage;
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
     }
@@ -105,6 +111,7 @@ public class CharacterController : MonoBehaviour
             _anim.SetBool("swordUp", true);
             _anim.SetBool("swordSide", false);
             _anim.SetBool("swordDown", false);
+            
         }
         else if ((enemyPosition.x + enemyPosition.y) / Mathf.Sqrt(2) > (transform.position.x + transform.position.y) / Mathf.Sqrt(2) &&
                 (enemyPosition.y - enemyPosition.x) / Mathf.Sqrt(2) < (transform.position.y - transform.position.x) / Mathf.Sqrt(2))
@@ -136,6 +143,7 @@ public class CharacterController : MonoBehaviour
             _anim.SetBool("swordSide", false);
             _anim.SetBool("swordDown", true);
         }
+        
     }
 
 
@@ -162,7 +170,35 @@ public class CharacterController : MonoBehaviour
         
     }
 
+    void DamageEnemys(string value)
+    {
+        
+        switch(value)
+        {
+            case "UP":
+                Collider2D[] enemysUP = Physics2D.OverlapCircleAll(_damagePoints[0].position, _rangeDamagePoints, _layerFindEnemys); 
+                foreach(var enemy in enemysUP) { enemy.GetComponent<HelthEnemy>().TakeDamage(_currentDamage); }
+                break;
+            case "SIDE":
+                Collider2D[] enemysSide = Physics2D.OverlapCircleAll(_damagePoints[1].position, _rangeDamagePoints, _layerFindEnemys);
+                foreach (var enemy in enemysSide) { enemy.GetComponent<HelthEnemy>().TakeDamage(_currentDamage); }
+                break;
+            case "DOWN":
+                Collider2D[] enemysDown = Physics2D.OverlapCircleAll(_damagePoints[2].position, _rangeDamagePoints, _layerFindEnemys);
+                foreach (var enemy in enemysDown) { enemy.GetComponent<HelthEnemy>().TakeDamage(_currentDamage); }
+                break;
+        }
+        
+    }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(_centerAttackRadius.position, _radiusAttack);
+        foreach(var point in _damagePoints)
+        {
+            Gizmos.DrawWireSphere(point.position, _rangeDamagePoints);
+        }
+    }
 
 
 }
