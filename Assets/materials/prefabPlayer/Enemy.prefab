@@ -107,6 +107,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e330328ccc4d814784887242e0ef078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startingState: 0
+  _roamingDistanceMax: 7
+  _roamingDistanceMin: 3
+  _roamingTimerMax: 2
 --- !u!1 &7885032787693874393
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7885032787693874392}
   - component: {fileID: 7885032787693874395}
+  - component: {fileID: 5920037692760743905}
   m_Layer: 0
   m_Name: VisualEnemy
   m_TagString: Untagged
@@ -191,3 +196,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &5920037692760743905
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7885032787693874393}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9971c7717639a944aae1ffc012f62b5f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

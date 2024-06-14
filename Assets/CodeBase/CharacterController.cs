@@ -30,7 +30,8 @@ public class CharacterController : MonoBehaviour
     private bool facingRight = true;
     private bool _isMove;
     private float _currentDamage;
-
+    private float moveX;
+    private float moveY;
     public bool _isDead;
 
 
@@ -42,7 +43,11 @@ public class CharacterController : MonoBehaviour
         _anim = GetComponent<Animator>();
     }
 
-
+    private void Update()
+    {
+        moveX = _joyStick.Horizontal;
+        moveY = _joyStick.Vertical;
+    }
     private void FixedUpdate()
     {
         MoveHero();
@@ -53,8 +58,7 @@ public class CharacterController : MonoBehaviour
     {
         //float moveX = Input.GetAxisRaw("Horizontal");
         // float moveY = Input.GetAxisRaw("Vertical");
-        float moveX = _joyStick.Horizontal;
-        float moveY = _joyStick.Vertical;
+        
         if (!_isDead)
         {
             _move = new Vector2(moveX, moveY).normalized * _speedCharacter;
